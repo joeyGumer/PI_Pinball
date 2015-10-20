@@ -16,17 +16,18 @@ public:
 	update_status Update();
 	bool CleanUp();
 	
-	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
+	//void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 	//TOIAN: this function is totally provisional, before we add the xml, this, just contains all the broder chains and put them in a list
-	void AddChains();
+	
 	//this one can be ussed after the xml application, because it paints all the borders
-	void DrawBorders();
+	void CreateBorders();
 
 public:
 	//TOIAN : i deleted the otbher lists, we don't need them
-	p2List<int*>	   chains;
+	//this is for the textures
 	p2List<PhysBody*> borders;
+	p2List<PhysBody*> balls;
 
 	PhysBody*		sensor;
 	bool			sensed;

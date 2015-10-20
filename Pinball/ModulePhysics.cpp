@@ -48,7 +48,8 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 //We don't need this for now
-/*PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
+
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
@@ -74,7 +75,7 @@ update_status ModulePhysics::PreUpdate()
 
 	return pbody;
 }
-
+/*
 PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 {
 	b2BodyDef body;
@@ -100,7 +101,8 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	bodies.add(pbody);
 
 	return pbody;
-}*/
+}
+*/
 
 PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, Body_type type)
 {
