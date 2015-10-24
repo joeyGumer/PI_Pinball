@@ -75,7 +75,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 
 	return pbody;
 }
-/*
+
 PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 {
 	b2BodyDef body;
@@ -102,7 +102,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 
 	return pbody;
 }
-*/
+
 
 PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, Body_type type)
 {
@@ -331,3 +331,21 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	LOG("Collision!!!");
 }
 // TODO 7: Call the listeners that are not NULL
+//I'm testing how this works
+void ModulePhysics::CreateRevJoint(int x1, int y1, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB)
+{
+	b2Vec2 localAnchor(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
+	b2Vec2 otherAnchor(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
+	//no tengo ni p idea de como va esto
+	b2RevoluteJointDef def;
+	def.bodyA = pbodyA->body;
+	def.bodyB = pbodyB->body;
+	def.localAnchorA = localAnchor;
+	def.localAnchorB = otherAnchor;
+	def.referenceAngle = 0;
+	def.enableLimit = true;
+	def.lowerAngle = -90 * DEGTORAD;
+	def.upperAngle = 30 * DEGTORAD;
+
+	b2RevoluteJoint* StickJoint = (b2RevoluteJoint*)world->CreateJoint(&def);
+}

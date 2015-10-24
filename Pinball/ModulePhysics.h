@@ -53,9 +53,12 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius);
-	//PhysBody* CreateRectangle(int x, int y, int width, int height);
+	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	//PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
-	PhysBody* CreateChain(int x, int y, int* points, int size, Body_type type);
+	PhysBody* CreateChain(int x1, int y1, int* points, int size, Body_type type);
+
+	//Joints
+	void CreateRevJoint(int x, int y, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB);
 
 	void BeginContact(b2Contact* contact);
 

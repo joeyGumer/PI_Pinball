@@ -33,6 +33,9 @@ bool ModuleSceneIntro::Start()
 
 	CreateBorders();
 	CreateSticks();
+	
+	PhysBody* box = App->physics->CreateRectangle(250, 500, 50, 25);
+	App->physics->CreateRevJoint(1, 0, 250, 550, box, borders.getFirst()->data);
 
 	return ret;
 }
@@ -85,7 +88,7 @@ void ModuleSceneIntro::CreateSticks()
 	};
 
 	size = 14;
-	sticks.add(App->physics->CreateChain(0, 0, stick1, size, static_body));
+	sticks.add(App->physics->CreateChain(0, 0, stick1, size, dynamic_body));
 }
 
 void ModuleSceneIntro::CreateBorders()
