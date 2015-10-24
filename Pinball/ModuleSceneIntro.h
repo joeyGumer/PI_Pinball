@@ -22,10 +22,12 @@ public:
 	
 	//this one can be ussed after the xml application, because it paints all the borders
 	void CreateBorders();
+	void CreateSticks();
 
 public:
 	//TOIAN : i deleted the otbher lists, we don't need them
 	//this is for the textures
+	p2List<PhysBody*> sticks;
 	p2List<PhysBody*> borders;
 	p2List<PhysBody*> balls;
 

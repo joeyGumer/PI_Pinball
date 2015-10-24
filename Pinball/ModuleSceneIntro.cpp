@@ -32,6 +32,7 @@ bool ModuleSceneIntro::Start()
 
 
 	CreateBorders();
+	CreateSticks();
 
 	return ret;
 }
@@ -69,6 +70,24 @@ update_status ModuleSceneIntro::Update()
 //we can traslate all this to a xml, in fact, is a lot better, but too much work 
 
 //TOIAN  this creates all the border boddies
+void ModuleSceneIntro::CreateSticks()
+{
+	int size;
+
+	int stick1[14] = {
+		282, 755,
+		293, 759,
+		291, 771,
+		245, 793,
+		233, 798,
+		230, 792,
+		242, 782
+	};
+
+	size = 14;
+	sticks.add(App->physics->CreateChain(0, 0, stick1, size, static_body));
+}
+
 void ModuleSceneIntro::CreateBorders()
 {
 	int size;
