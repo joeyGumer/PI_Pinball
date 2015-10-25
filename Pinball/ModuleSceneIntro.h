@@ -34,11 +34,16 @@ public:
 	
 	float			flipper_speed;
 
+	//
 	PhysBody*		sensor;
 	bool			sensed;
 
 	//TOIAN: added the scene texture, but we don't need it now
-	SDL_Texture*	Scene;
+	SDL_Texture*	scene;
+	SDL_Texture*    flipper;
+	SDL_Texture*	ball;
+	SDL_Rect		scene_rect;
+	
 	uint			bonus_fx;
 	p2Point<int>	ray;
 	bool			ray_on;

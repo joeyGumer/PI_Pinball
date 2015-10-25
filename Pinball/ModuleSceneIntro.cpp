@@ -9,7 +9,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	//circle = box = rick = NULL;
+	scene = flipper = ball = NULL;
 	ray_on = false;
 	sensed = false;
 	flipper_speed = 3 * 360 * DEGTORAD;
@@ -26,11 +26,14 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	//circle = App->textures->Load("pinball/wheel.png");
+	scene = App->textures->Load("Game/pinball/scene_void.png");
+	flipper = App->textures->Load("Game/pinball/flipper.png");
+	ball = App->textures->Load("Game/pinball/ball.png");
+	
 	
 	bonus_fx = App->audio->LoadFx("Game/pinball/bonus.wav");
 	//TOIAN : DON'T DARE TO TOUCH THIS D:<
-	App->audio->PlayMusic("Game/pinball/My_time_is_now.ogg");
+	//App->audio->PlayMusic("Game/pinball/My_time_is_now.ogg");
 
 	//TOIAN : Creates the borders and the flippers, the borders before the flippers, 
 	//because the flippers are created with a joint atached to a border
@@ -54,6 +57,52 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	//TOIAN all draws (i use a global sdl_rect so i don't need to inicialice on each iteration
+	App->renderer->Blit(scene, 0, 0, NULL);
+	
+	scene_rect = { 17, 38, 77, 26 };
+
+	
+	/*
+	//Draw functions
+	*/
+	// TOIAN All this data has to be adjusted to have a better performance
+	p2List_item<PhysBody*>* item = flippersLeft.getFirst();
+	scene_rect = { 17, 38, 77, 26 };
+	while (item)
+	{
+		int x, y;
+		item->data->GetPosition(x, y);
+		App->renderer->Blit(flipper, x-8, y, &scene_rect, 1.0f, item->data->GetRotation());
+
+		item = item->next;
+	}
+
+	item = flippersRight.getFirst();
+	scene_rect = { 106, 40, 77, 26 };
+	
+	while (item)
+	{
+		int x, y;
+		item->data->GetPosition(x, y);
+		App->renderer->Blit(flipper, x, y, &scene_rect, 1.0f, item->data->GetRotation());
+
+		item = item->next;
+	}
+
+	item = balls.getFirst();
+	while (item)
+	{
+		int x, y;
+		item->data->GetPosition(x, y);
+		App->renderer->Blit(ball, x, y, NULL, 1.0f, item->data->GetRotation());
+
+		item = item->next;
+	}
+
+	/*
+	//Inputs
+	*/
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		balls.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 13));
