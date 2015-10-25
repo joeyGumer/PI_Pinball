@@ -34,7 +34,7 @@ bool ModuleSceneIntro::Start()
 	
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	//TOIAN : DON'T DARE TO TOUCH THIS D:<
-	App->audio->PlayMusic("pinball/My_time_is_now.ogg");
+	//App->audio->PlayMusic("pinball/My_time_is_now.ogg");
 
 	//TOIAN : Creates the borders and the flippers, the borders before the flippers, 
 	//because the flippers are created with a joint atached to a border
