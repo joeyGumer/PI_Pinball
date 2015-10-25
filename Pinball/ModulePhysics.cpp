@@ -355,9 +355,33 @@ void ModulePhysics::CreateRevJoint(int x1, int y1, int x2, int y2, PhysBody* pbo
 	def.upperAngle = upper;
 
 	def.enableMotor = true;
-	def.maxMotorTorque = 100;
+	def.maxMotorTorque = 200;
 	def.motorSpeed = speed;
 
 	b2RevoluteJoint* FlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&def);
 }
 //---------
+
+void ModulePhysics::CreatePrismaticJoint(int x1, int y1, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB, float upper, float lower, float speed)
+{
+	b2Vec2 localAnchor(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
+	b2Vec2 otherAnchor(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
+
+	b2PrismaticJointDef def;
+	def.localAxisA.Set(0, 1);
+	def.bodyA = pbodyA->body;
+	def.bodyB = pbodyB->body;
+	def.localAnchorA = localAnchor;
+	def.localAnchorB = otherAnchor;
+	def.referenceAngle = 0;
+
+	def.enableLimit = true;
+	def.lowerTranslation = lower;
+	def.upperTranslation = upper;
+
+	def.enableMotor = true;
+	def.maxMotorForce = 200;
+	def.motorSpeed = speed;
+
+	b2PrismaticJoint* PrismaticJoint = (b2PrismaticJoint*)world->CreateJoint(&def);
+}

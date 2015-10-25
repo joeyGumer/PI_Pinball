@@ -9,10 +9,11 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	//circle = box = rick = NULL;
+	scene = flipper = ball = NULL;
 	ray_on = false;
 	sensed = false;
 	flipper_speed = 3 * 360 * DEGTORAD;
+	stick_speed = 20;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -26,16 +27,20 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	//circle = App->textures->Load("pinball/wheel.png");
+	scene = App->textures->Load("pinball/scene_void.png");
+	flipper = App->textures->Load("pinball/flipper.png");
+	ball = App->textures->Load("pinball/ball.png");
 	
-	bonus_fx = App->audio->LoadFx("Game/pinball/bonus.wav");
+	
+	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	//TOIAN : DON'T DARE TO TOUCH THIS D:<
-	App->audio->PlayMusic("Game/pinball/My_time_is_now.ogg");
+	App->audio->PlayMusic("pinball/My_time_is_now.ogg");
 
 	//TOIAN : Creates the borders and the flippers, the borders before the flippers, 
 	//because the flippers are created with a joint atached to a border
 	CreateBorders();
 	CreateFlippers();
+	CreateSticks();
 
 	return ret;
 }
@@ -54,6 +59,52 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	//TOIAN all draws (i use a global sdl_rect so i don't need to inicialice on each iteration
+	App->renderer->Blit(scene, 0, 0, NULL);
+	
+	scene_rect = { 17, 38, 77, 26 };
+
+	
+	/*
+	//Draw functions
+	*/
+	// TOIAN All this data has to be adjusted to have a better performance
+	p2List_item<PhysBody*>* item = flippersLeft.getFirst();
+	scene_rect = { 17, 38, 77, 26 };
+	while (item)
+	{
+		int x, y;
+		item->data->GetPosition(x, y);
+		App->renderer->Blit(flipper, x-8, y, &scene_rect, 1.0f, item->data->GetRotation());
+
+		item = item->next;
+	}
+
+	item = flippersRight.getFirst();
+	scene_rect = { 106, 40, 77, 26 };
+	
+	while (item)
+	{
+		int x, y;
+		item->data->GetPosition(x, y);
+		App->renderer->Blit(flipper, x, y, &scene_rect, 1.0f, item->data->GetRotation());
+
+		item = item->next;
+	}
+
+	item = balls.getFirst();
+	while (item)
+	{
+		int x, y;
+		item->data->GetPosition(x, y);
+		App->renderer->Blit(ball, x, y, NULL, 1.0f, item->data->GetRotation());
+
+		item = item->next;
+	}
+
+	/*
+	//Inputs
+	*/
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		balls.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 13));
@@ -76,6 +127,14 @@ update_status ModuleSceneIntro::Update()
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
 	{
 		((b2RevoluteJoint*)flippersLeft.getFirst()->data->body->GetJointList()->joint)->SetMotorSpeed(-flipper_speed);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		((b2PrismaticJoint*)sticks.getFirst()->data->body->GetJointList()->joint)->SetMotorSpeed(-stick_speed);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
+	{
+		((b2PrismaticJoint*)sticks.getFirst()->data->body->GetJointList()->joint)->SetMotorSpeed(stick_speed);
 	}
 	//--------------
 	
@@ -121,6 +180,13 @@ void ModuleSceneIntro::CreateFlippers()
 	App->physics->CreateRevJoint(-32, -10, 122, 754, flipper2, borders.getFirst()->data, 30 *DEGTORAD, -30 * DEGTORAD, -flipper_speed);
 	
 	flippersLeft.add(flipper2);
+}
+
+void ModuleSceneIntro::CreateSticks()
+{
+	PhysBody* stick = App->physics->CreateRectangle(464, 755, 20, 64);
+	App->physics->CreatePrismaticJoint(-10, -32, 454, 785, stick, borders.getFirst()->data, 1, -1, stick_speed);
+	sticks.add(stick);
 }
 
 void ModuleSceneIntro::CreateBorders()

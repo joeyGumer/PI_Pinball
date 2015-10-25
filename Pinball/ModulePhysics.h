@@ -61,6 +61,7 @@ public:
 
 	//Joints
 	void CreateRevJoint(int x, int y, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB, float upper, float lower, float speed);
+	void CreatePrismaticJoint(int x1, int y1, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB, float upper, float lower, float speed);
 
 	void BeginContact(b2Contact* contact);
 
