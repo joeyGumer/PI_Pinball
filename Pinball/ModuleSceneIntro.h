@@ -22,14 +22,17 @@ public:
 	
 	//this one can be ussed after the xml application, because it paints all the borders
 	void CreateBorders();
-	void CreateSticks();
+	void CreateFlippers();
 
 public:
-	//TOIAN : i deleted the otbher lists, we don't need them
-	//this is for the textures
-	p2List<PhysBody*> sticks;
+	//TOIAN : there are 2 list, one for the right flippers and one for the left flippers, 
+	//because they have different control and motor speed, angle,...
+	p2List<PhysBody*> flippersRight;
+	p2List<PhysBody*> flippersLeft;
 	p2List<PhysBody*> borders;
 	p2List<PhysBody*> balls;
+	
+	float			flipper_speed;
 
 	PhysBody*		sensor;
 	bool			sensed;

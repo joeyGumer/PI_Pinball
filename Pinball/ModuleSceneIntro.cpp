@@ -12,6 +12,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	//circle = box = rick = NULL;
 	ray_on = false;
 	sensed = false;
+	flipper_speed = 3 * 360 * DEGTORAD;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -25,17 +26,16 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	/*circle = App->textures->Load("pinball/wheel.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");*/
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-
-
-	CreateBorders();
-	CreateSticks();
+	//circle = App->textures->Load("pinball/wheel.png");
 	
-	PhysBody* box = App->physics->CreateRectangle(250, 500, 50, 25);
-	App->physics->CreateRevJoint(1, 0, 250, 550, box, borders.getFirst()->data);
+	bonus_fx = App->audio->LoadFx("Game/pinball/bonus.wav");
+	//TOIAN : DON'T DARE TO TOUCH THIS D:<
+	App->audio->PlayMusic("Game/pinball/My_time_is_now.ogg");
+
+	//TOIAN : Creates the borders and the flippers, the borders before the flippers, 
+	//because the flippers are created with a joint atached to a border
+	CreateBorders();
+	CreateFlippers();
 
 	return ret;
 }
@@ -59,8 +59,26 @@ update_status ModuleSceneIntro::Update()
 		balls.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 13));
 	}
 
-	//TOIAN deleted all about the rayccast for now, if we need it we
+	//TOIAN : Flippers control
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		((b2RevoluteJoint*)flippersRight.getFirst()->data->body->GetJointList()->joint)->SetMotorSpeed(-flipper_speed);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
+	{
+		((b2RevoluteJoint*)flippersRight.getFirst()->data->body->GetJointList()->joint)->SetMotorSpeed(flipper_speed);
+	}
 
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		((b2RevoluteJoint*)flippersLeft.getFirst()->data->body->GetJointList()->joint)->SetMotorSpeed(flipper_speed);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+	{
+		((b2RevoluteJoint*)flippersLeft.getFirst()->data->body->GetJointList()->joint)->SetMotorSpeed(-flipper_speed);
+	}
+	//--------------
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -73,11 +91,12 @@ update_status ModuleSceneIntro::Update()
 //we can traslate all this to a xml, in fact, is a lot better, but too much work 
 
 //TOIAN  this creates all the border boddies
-void ModuleSceneIntro::CreateSticks()
+void ModuleSceneIntro::CreateFlippers()
 {
-	int size;
+	//TOIAN: This is with the flipper chain, but it doesn't work, the coordinates system for the joint is different
+	/*int size;
 
-	int stick1[14] = {
+	int flipper1[14] = {
 		282, 755,
 		293, 759,
 		291, 771,
@@ -88,13 +107,34 @@ void ModuleSceneIntro::CreateSticks()
 	};
 
 	size = 14;
-	sticks.add(App->physics->CreateChain(0, 0, stick1, size, dynamic_body));
+	flippers.add(App->physics->CreateChain(0, 0, flipper1, size, dynamic_body));*/
+	//So i used a box instead, and it works
+	//it can be optimized
+	//1
+	PhysBody* flipper1 = App->physics->CreateRectangle(234, 752, 64, 20);
+	
+	App->physics->CreateRevJoint(32, -10, 288, 754, flipper1, borders.getFirst()->data, 30 * DEGTORAD, -30 * DEGTORAD, flipper_speed);//joint added to the body
+	flippersRight.add(flipper1);
+
+	//2
+	PhysBody* flipper2 = App->physics->CreateRectangle(187, 752, 64, 20);
+	App->physics->CreateRevJoint(-32, -10, 122, 754, flipper2, borders.getFirst()->data, 30 *DEGTORAD, -30 * DEGTORAD, -flipper_speed);
+	
+	flippersLeft.add(flipper2);
 }
 
 void ModuleSceneIntro::CreateBorders()
 {
 	int size;
-
+	//0
+	int scene[8] = {
+		0, 840,
+		0, 0,
+		480, 0,
+		480, 840
+	};
+	size = 8;
+	borders.add(App->physics->CreateChain(0, 0, scene, size, static_body));
 	//1
 	int border1[102] = {
 		0, 0,

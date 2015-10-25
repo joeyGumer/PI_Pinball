@@ -37,6 +37,8 @@ public:
 	int width, height;
 	b2Body* body;
 	Module* listener;
+	//provisional
+	
 };
 
 // Module --------------------------------------
@@ -58,7 +60,7 @@ public:
 	PhysBody* CreateChain(int x1, int y1, int* points, int size, Body_type type);
 
 	//Joints
-	void CreateRevJoint(int x, int y, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB);
+	void CreateRevJoint(int x, int y, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB, float upper, float lower, float speed);
 
 	void BeginContact(b2Contact* contact);
 

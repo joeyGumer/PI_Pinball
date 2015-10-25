@@ -330,22 +330,34 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	LOG("Collision!!!");
 }
-// TODO 7: Call the listeners that are not NULL
+
 //I'm testing how this works
-void ModulePhysics::CreateRevJoint(int x1, int y1, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB)
+//TOIAN : Added this function to Module Physics, it creates a revolute joint,
+// it need the bodies coordinate where the anchor will go for each body
+// the 2 bodies
+// the upper and lower angle of revolution
+// the motor speed , this is added because it will be changed when doing the input
+void ModulePhysics::CreateRevJoint(int x1, int y1, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB ,float upper, float lower, float speed)
 {
 	b2Vec2 localAnchor(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
 	b2Vec2 otherAnchor(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
-	//no tengo ni p idea de como va esto
+	
+	
 	b2RevoluteJointDef def;
 	def.bodyA = pbodyA->body;
 	def.bodyB = pbodyB->body;
 	def.localAnchorA = localAnchor;
 	def.localAnchorB = otherAnchor;
 	def.referenceAngle = 0;
+	
 	def.enableLimit = true;
-	def.lowerAngle = -90 * DEGTORAD;
-	def.upperAngle = 30 * DEGTORAD;
+	def.lowerAngle = lower;
+	def.upperAngle = upper;
 
-	b2RevoluteJoint* StickJoint = (b2RevoluteJoint*)world->CreateJoint(&def);
+	def.enableMotor = true;
+	def.maxMotorTorque = 100;
+	def.motorSpeed = speed;
+
+	b2RevoluteJoint* FlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&def);
 }
+//---------
