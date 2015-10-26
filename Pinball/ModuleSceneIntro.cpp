@@ -130,7 +130,7 @@ update_status ModuleSceneIntro::Update()
 	}
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		((b2PrismaticJoint*)sticks.getFirst()->data->body->GetJointList()->joint)->SetMotorSpeed(-stick_speed);
+		((b2PrismaticJoint*)sticks.getFirst()->data->body->GetJointList()->joint)->SetMotorSpeed(-stick_speed*0.05);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_UP)
 	{
