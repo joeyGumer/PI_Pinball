@@ -166,3 +166,9 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat)
 
 	return ret;
 }
+
+//Set Volume
+void ModuleAudio::SetVolume(int volume)
+{
+	Mix_VolumeMusic(volume);
+}
