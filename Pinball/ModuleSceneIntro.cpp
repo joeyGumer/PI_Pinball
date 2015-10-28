@@ -424,6 +424,44 @@ void ModuleSceneIntro::CreateBorders()
 	size = 14;
 	borders.add(App->physics->CreateChain(0, 0, stick4, size, static_body));
 
+	//5
+	int stick5[10] = {
+		275, 38,
+		282, 38,
+		282, 77,
+		275, 77,
+		275, 43
+	};
+	size = 10;
+	borders.add(App->physics->CreateChain(0, 0, stick5, size, static_body));
+
+
+	//triangle1
+	int triangle1[14] = {
+		67, 601,
+		67, 675,
+		106, 698,
+		114, 701,
+		118, 696,
+		77, 597,
+		71, 594
+	};
+	size = 14;
+	borders.add(App->physics->CreatePoly(0, 0, triangle1, size, 1.5f, static_body));
+
+	//triangle2
+	int triangle2[14] = {
+		340, 595,
+		334, 594,
+		291, 694,
+		292, 700,
+		298, 700,
+		340, 675,
+		340, 600
+	};
+	size = 14;
+	borders.add(App->physics->CreatePoly(0, 0, triangle2, size, 1.5f, static_body));
+
 	borders.add(App->physics->CreateStaticCircle(212, 142, 21));
 	borders.add(App->physics->CreateStaticCircle(280, 138, 21));
 }

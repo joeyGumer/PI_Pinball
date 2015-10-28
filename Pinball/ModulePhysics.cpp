@@ -212,6 +212,8 @@ PhysBody* ModulePhysics::CreatePoly(int x, int y, int* points, int size, float r
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
+	fixture.density = 1.0f;
+	fixture.restitution = restitution;
 
 	b->CreateFixture(&fixture);
 
