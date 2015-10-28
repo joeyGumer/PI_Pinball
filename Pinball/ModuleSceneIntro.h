@@ -30,6 +30,7 @@ public:
 	//because they have different control and motor speed, angle,...
 	p2List<PhysBody*> flippersRight;
 	p2List<PhysBody*> flippersLeft;
+	p2List<PhysBody*> flippers;
 	p2List<PhysBody*> borders;
 	p2List<PhysBody*> balls;
 	p2List<PhysBody*> sticks;

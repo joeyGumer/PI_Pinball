@@ -59,6 +59,7 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	//PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x1, int y1, int* points, int size, Body_type type);
+	PhysBody* CreatePoly(int x1, int y1, int* points, int size, float restitution, Body_type type);
 
 	//Joints
 	void CreateRevJoint(int x, int y, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB, float upper, float lower, float speed);
