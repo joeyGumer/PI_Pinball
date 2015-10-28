@@ -55,6 +55,7 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius);
+	PhysBody* CreateStaticCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	//PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x1, int y1, int* points, int size, Body_type type);

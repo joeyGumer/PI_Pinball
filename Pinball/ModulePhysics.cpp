@@ -76,6 +76,34 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreateStaticCircle(int x, int y, int radius)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+	fixture.restitution = 1.5f;
+
+	b->CreateFixture(&fixture);
+
+	// TODO 4: add a pointer to PhysBody as UserData to the body
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	pbody->width = pbody->height = radius;
+
+	b->SetUserData(pbody);
+	bodies.add(pbody);
+
+	return pbody;
+}
+
 PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 {
 	b2BodyDef body;

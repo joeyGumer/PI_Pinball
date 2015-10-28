@@ -424,5 +424,6 @@ void ModuleSceneIntro::CreateBorders()
 	size = 14;
 	borders.add(App->physics->CreateChain(0, 0, stick4, size, static_body));
 
-
+	borders.add(App->physics->CreateStaticCircle(212, 142, 21));
+	borders.add(App->physics->CreateStaticCircle(280, 138, 21));
 }
