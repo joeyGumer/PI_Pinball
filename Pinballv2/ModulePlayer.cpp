@@ -8,7 +8,9 @@
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	ball = NULL;
+	ball = rightFlipper = rightCircle =  leftFlipper = leftCircle = NULL;
+	ballTexture = NULL;
+	flipperSpeed = -20;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -19,9 +21,9 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
-	ball = App->textures->Load("pinball/wheel.png");
+	ballTexture = App->textures->Load("pinball/wheel.png");
 
-	//CreateFlippers();
+	CreateFlippers();
 
 	return true;
 }
@@ -31,7 +33,7 @@ bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
 
-	App->textures->Unload(ball);
+	App->textures->Unload(ballTexture);
 
 	return true;
 }
@@ -40,26 +42,62 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update()
 {
 
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && !circle)
+	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN /*&& !circle*/)
 	{
-		circle = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 22, dynamic_body);
+		ball = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10, dynamic_body);
 		//circles.getLast()->data->listener = this;
 	}
+
+	//Flippers Control
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		((b2RevoluteJoint*)leftFlipper->body->GetJointList()->joint)->SetMotorSpeed(-flipperSpeed);
+	}
+	else if(App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
+	{
+		((b2RevoluteJoint*)leftFlipper->body->GetJointList()->joint)->SetMotorSpeed(flipperSpeed);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		((b2RevoluteJoint*)rightFlipper->body->GetJointList()->joint)->SetMotorSpeed(flipperSpeed);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
+	{
+		((b2RevoluteJoint*)rightFlipper->body->GetJointList()->joint)->SetMotorSpeed(-flipperSpeed);
+	}
+
 
 	return UPDATE_CONTINUE;
 }
 
-void CreateFlippers()
+void ModulePlayer::CreateFlippers()
 {
-	//RightFlipper
-	//CreatePoly()
-	//CreateCircle()
-	//CreateRevJoint()
-
 	//LeftFlipper
-	//CreatePoly()
-	//CreateCircle()
-	//CreateRevJoint()
+	int Left[12] = {
+		9, 4,
+		3, 14,
+		9, 23,
+		63, 20,
+		68, 15,
+		65, 10
+	};
+	leftFlipper = App->physics->CreatePoly(104, 552, Left, 12, dynamic_body, 0);	
+	leftCircle = App->physics->CreateCircle(104 + 15, 552 + 14, 2, static_body);
+	App->physics->CreateRevJoint(15, 14, 0, 0, leftFlipper, leftCircle, 33, -27, flipperSpeed);
+
+	//RightFlipper
+	int Right[12] = {
+		70, 13,
+		63, 4,
+		9, 9,
+		4, 15,
+		8, 19,
+		62, 23
+	};
+	rightFlipper = App->physics->CreatePoly(210, 552, Right, 12, dynamic_body, 0);
+	rightCircle = App->physics->CreateCircle(210 + 54, 552 + 14, 2, static_body);
+	App->physics->CreateRevJoint(54, 14, 0, 0, rightFlipper, rightCircle, 33, -27, -flipperSpeed);
 }
 
 

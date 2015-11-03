@@ -21,10 +21,14 @@ public:
 
 public:
 
-	PhysBody* circle;
-	PhysBody* RightFlipper;
-	PhysBody* LeftFlipper;
+	PhysBody*		ball;
+	PhysBody*		rightFlipper;
+	PhysBody*       rightCircle;
+	PhysBody*		leftFlipper;
+	PhysBody*       leftCircle;
 
-	SDL_Texture*	ball;
+	SDL_Texture*	ballTexture;
+
+	float			flipperSpeed;
 
 };

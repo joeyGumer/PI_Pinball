@@ -165,7 +165,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreatePoly(int x, int y, int* points, int size, float restitution, Body_type type)
+PhysBody* ModulePhysics::CreatePoly(int x, int y, int* points, int size, Body_type type, float restitution)
 {
 	b2BodyDef body;
 	switch (type)
@@ -229,8 +229,8 @@ void ModulePhysics::CreateRevJoint(int x1, int y1, int x2, int y2, PhysBody* pbo
 	def.referenceAngle = 0;
 
 	def.enableLimit = true;
-	def.lowerAngle = lower;
-	def.upperAngle = upper;
+	def.lowerAngle = DEGTORAD * lower;
+	def.upperAngle = DEGTORAD * upper;
 
 	def.enableMotor = true;
 	def.maxMotorTorque = 200;
