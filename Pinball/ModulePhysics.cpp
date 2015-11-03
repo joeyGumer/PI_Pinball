@@ -236,7 +236,7 @@ update_status ModulePhysics::PostUpdate()
 				}
 				break;
 			}
-			LOG("puta")
+			
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN /*&& found == false*/)
 			{
 				
