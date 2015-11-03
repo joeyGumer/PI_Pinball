@@ -57,6 +57,9 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
+/*
+//Bodies
+*/
 PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, Body_type type)
 {
 	b2BodyDef body;
@@ -162,6 +165,104 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreatePoly(int x, int y, int* points, int size, float restitution, Body_type type)
+{
+	b2BodyDef body;
+	switch (type)
+	{
+	case static_body:
+		body.type = b2_staticBody;
+		break;
+	case dynamic_body:
+		body.type = b2_dynamicBody;
+		break;
+	case kinematic_body:
+		body.type = b2_kinematicBody;
+		break;
+	}
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2PolygonShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.Set(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+	fixture.restitution = restitution;
+
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	pbody->width = pbody->height = 0;
+	b->SetUserData(pbody);
+
+	return pbody;
+}
+
+/*
+//Joints
+*/
+void ModulePhysics::CreateRevJoint(int x1, int y1, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB, float upper, float lower, float speed)
+{
+	b2Vec2 localAnchor(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
+	b2Vec2 otherAnchor(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
+
+
+	b2RevoluteJointDef def;
+	def.bodyA = pbodyA->body;
+	def.bodyB = pbodyB->body;
+	def.localAnchorA = localAnchor;
+	def.localAnchorB = otherAnchor;
+	def.referenceAngle = 0;
+
+	def.enableLimit = true;
+	def.lowerAngle = lower;
+	def.upperAngle = upper;
+
+	def.enableMotor = true;
+	def.maxMotorTorque = 200;
+	def.motorSpeed = speed;
+
+	b2RevoluteJoint* FlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&def);
+}
+//---------
+
+void ModulePhysics::CreatePrismaticJoint(int x1, int y1, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB, float upper, float lower, float speed)
+{
+	b2Vec2 localAnchor(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
+	b2Vec2 otherAnchor(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
+
+	b2PrismaticJointDef def;
+	def.localAxisA.Set(0, 1);
+	def.bodyA = pbodyA->body;
+	def.bodyB = pbodyB->body;
+	def.localAnchorA = localAnchor;
+	def.localAnchorB = otherAnchor;
+	def.referenceAngle = 0;
+
+	def.enableLimit = true;
+	def.lowerTranslation = lower;
+	def.upperTranslation = upper;
+
+	def.enableMotor = true;
+	def.maxMotorForce = 200;
+	def.motorSpeed = speed;
+
+	b2PrismaticJoint* PrismaticJoint = (b2PrismaticJoint*)world->CreateJoint(&def);
+}
 // 
 update_status ModulePhysics::PostUpdate()
 {

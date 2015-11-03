@@ -9,7 +9,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	ball = scene = NULL;
+	scene = NULL;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -22,8 +22,6 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-
-	ball = App->textures->Load("pinball/wheel.png"); 
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
@@ -43,7 +41,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 22, dynamic_body));
 		circles.getLast()->data->listener = this;
@@ -59,7 +57,7 @@ update_status ModuleSceneIntro::Update()
 		if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
 			App->renderer->Blit(ball, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
-	}
+	}*/
 
 	return UPDATE_CONTINUE;
 }

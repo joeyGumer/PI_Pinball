@@ -20,13 +20,12 @@ public:
 	//Pinball
 	void CreateBorders();
 public:
-	p2List<PhysBody*> circles;
 	p2List<PhysBody*> borders;
 
 	/*PhysBody* sensor;
 	bool sensed;*/
 	SDL_Texture*		scene;
-	SDL_Texture*		ball;
+
 
 	uint bonus_fx;
 	p2Point<int> ray;

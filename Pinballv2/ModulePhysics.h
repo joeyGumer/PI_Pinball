@@ -48,10 +48,16 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
+	//Bodies
 	PhysBody* CreateCircle(int x, int y, int radius, Body_type type);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, Body_type type);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreatePoly(int x, int y, int* points, int size, float restitution, Body_type type);
 
+	//Joints
+	void CreateRevJoint(int x1, int y1, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB, float upper, float lower, float speed);
+	void CreatePrismaticJoint(int x1, int y1, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB, float upper, float lower, float speed);
+	
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
