@@ -22,21 +22,21 @@ public:
 	
 	//this one can be ussed after the xml application, because it paints all the borders
 	void CreateBorders();
-	void CreateSticks();
+	
 
 public:
 	//TOIAN : i deleted the otbher lists, we don't need them
 	//this is for the textures
-	p2List<PhysBody*> sticks;
+	//p2List<PhysBody*> flippers;
 	p2List<PhysBody*> borders;
 	p2List<PhysBody*> balls;
 
-	PhysBody*		sensor;
-	bool			sensed;
+	/*PhysBody*		sensor;
+	bool			sensed;*/
 
 	//TOIAN: added the scene texture, but we don't need it now
 	SDL_Texture*	Scene;
 	uint			bonus_fx;
-	p2Point<int>	ray;
-	bool			ray_on;
+	/*p2Point<int>	ray;
+	bool			ray_on;*/
 };

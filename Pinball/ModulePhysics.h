@@ -64,4 +64,10 @@ private:
 	bool				debug;
 	b2World*			world;
 	p2List<PhysBody*>	bodies;
+
+	//used to create the mouse joint
+	b2MouseJoint*       mouse_joint;
+	b2Vec2              init_position;
+	b2Vec2				mouse_position;
+	b2Body*				ground;
 };
