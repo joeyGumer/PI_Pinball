@@ -6,6 +6,8 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModuleWindow.h"
+#include "ModulePlayer.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -41,6 +43,9 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	char title[50];
+	sprintf_s(title, "Lives: %d", App->player->lives);
+	App->window->SetTitle(title);
 	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 22, dynamic_body));

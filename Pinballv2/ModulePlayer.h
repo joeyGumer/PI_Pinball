@@ -5,6 +5,7 @@
 #include "SDL\include\SDL.h"
 
 class PhysBody;
+class b2Vec2;
 
 class ModulePlayer : public Module
 {
@@ -18,6 +19,7 @@ public:
 
 	//Player
 	void CreateFlippers();
+	void CreateSpring();
 
 public:
 
@@ -26,9 +28,13 @@ public:
 	PhysBody*       rightCircle;
 	PhysBody*		leftFlipper;
 	PhysBody*       leftCircle;
+	PhysBody*		spring;
+	PhysBody*		springCircle;
 
 	SDL_Texture*	ballTexture;
 
 	float			flipperSpeed;
+	float           springSpeed;
+	int				lives;
 
 };

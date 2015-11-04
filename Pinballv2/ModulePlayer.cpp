@@ -10,7 +10,10 @@ ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, s
 {
 	ball = rightFlipper = rightCircle =  leftFlipper = leftCircle = NULL;
 	ballTexture = NULL;
-	flipperSpeed = -20;
+
+	flipperSpeed = 20;
+	springSpeed = 20;
+	lives = 5;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -24,6 +27,7 @@ bool ModulePlayer::Start()
 	ballTexture = App->textures->Load("pinball/wheel.png");
 
 	CreateFlippers();
+	CreateSpring();
 
 	return true;
 }
@@ -51,22 +55,42 @@ update_status ModulePlayer::Update()
 	//Flippers Control
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		((b2RevoluteJoint*)leftFlipper->body->GetJointList()->joint)->SetMotorSpeed(-flipperSpeed);
+		((b2RevoluteJoint*)leftFlipper->body->GetJointList()->joint)->SetMotorSpeed(flipperSpeed);
 	}
 	else if(App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
 	{
-		((b2RevoluteJoint*)leftFlipper->body->GetJointList()->joint)->SetMotorSpeed(flipperSpeed);
+		((b2RevoluteJoint*)leftFlipper->body->GetJointList()->joint)->SetMotorSpeed(-flipperSpeed);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		((b2RevoluteJoint*)rightFlipper->body->GetJointList()->joint)->SetMotorSpeed(flipperSpeed);
+		((b2RevoluteJoint*)rightFlipper->body->GetJointList()->joint)->SetMotorSpeed(-flipperSpeed);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
 	{
-		((b2RevoluteJoint*)rightFlipper->body->GetJointList()->joint)->SetMotorSpeed(-flipperSpeed);
+		((b2RevoluteJoint*)rightFlipper->body->GetJointList()->joint)->SetMotorSpeed(flipperSpeed);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		((b2PrismaticJoint*)spring->body->GetJointList()->joint)->SetMotorSpeed(-springSpeed / 10);
+	}
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+	{
+		((b2PrismaticJoint*)spring->body->GetJointList()->joint)->SetMotorSpeed(springSpeed);
+	}
+
+
+	//This will be changed to a Oncollision Method
+	if (ball && ball->body->GetPosition().y >= PIXEL_TO_METERS(SCREEN_HEIGHT + 5))
+	{
+		
+		ball->SetPosition(380, 490);
+		b2Vec2 v(0, 0);
+		ball->body->SetLinearVelocity(v);
+		lives--;
+		
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -84,7 +108,7 @@ void ModulePlayer::CreateFlippers()
 	};
 	leftFlipper = App->physics->CreatePoly(104, 552, Left, 12, dynamic_body, 0);	
 	leftCircle = App->physics->CreateCircle(104 + 15, 552 + 14, 2, static_body);
-	App->physics->CreateRevJoint(15, 14, 0, 0, leftFlipper, leftCircle, 33, -27, flipperSpeed);
+	App->physics->CreateRevJoint(15, 14, 0, 0, leftFlipper, leftCircle, 33, -27, -flipperSpeed);
 
 	//RightFlipper
 	int Right[12] = {
@@ -97,8 +121,21 @@ void ModulePlayer::CreateFlippers()
 	};
 	rightFlipper = App->physics->CreatePoly(210, 552, Right, 12, dynamic_body, 0);
 	rightCircle = App->physics->CreateCircle(210 + 54, 552 + 14, 2, static_body);
-	App->physics->CreateRevJoint(54, 14, 0, 0, rightFlipper, rightCircle, 33, -27, -flipperSpeed);
+	App->physics->CreateRevJoint(54, 14, 0, 0, rightFlipper, rightCircle, 33, -27, flipperSpeed);
 }
 
+void ModulePlayer::CreateSpring()
+{
+	int Spring[8] = {
+		0, 0,
+		20, 0,
+		20, 10,
+		0, 10
+	};
+
+	spring = App->physics->CreatePoly(370, 550, Spring, 8, dynamic_body, 0);
+	springCircle = App->physics->CreateCircle(380, 560, 2, static_body);
+	App->physics->CreatePrismaticJoint(10, 5, 0, 0, spring, springCircle, 50, 0, springSpeed);
+}
 
 

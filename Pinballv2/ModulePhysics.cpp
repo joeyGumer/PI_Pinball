@@ -233,7 +233,7 @@ void ModulePhysics::CreateRevJoint(int x1, int y1, int x2, int y2, PhysBody* pbo
 	def.upperAngle = DEGTORAD * upper;
 
 	def.enableMotor = true;
-	def.maxMotorTorque = 200;
+	def.maxMotorTorque = 50;
 	def.motorSpeed = speed;
 
 	b2RevoluteJoint* FlipperJoint = (b2RevoluteJoint*)world->CreateJoint(&def);
@@ -254,11 +254,11 @@ void ModulePhysics::CreatePrismaticJoint(int x1, int y1, int x2, int y2, PhysBod
 	def.referenceAngle = 0;
 
 	def.enableLimit = true;
-	def.lowerTranslation = lower;
-	def.upperTranslation = upper;
+	def.lowerTranslation = DEGTORAD *lower;
+	def.upperTranslation = DEGTORAD *upper;
 
 	def.enableMotor = true;
-	def.maxMotorForce = 200;
+	def.maxMotorForce = 50;
 	def.motorSpeed = speed;
 
 	b2PrismaticJoint* PrismaticJoint = (b2PrismaticJoint*)world->CreateJoint(&def);
@@ -289,7 +289,7 @@ update_status ModulePhysics::PostUpdate()
 				{
 					b2CircleShape* shape = (b2CircleShape*)f->GetShape();
 					b2Vec2 pos = f->GetBody()->GetPosition();
-					App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
+					App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x + App->renderer->camera.x), METERS_TO_PIXELS(pos.y + App->renderer->camera.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
 				}
 				break;
 
@@ -419,6 +419,9 @@ bool ModulePhysics::CleanUp()
 	return true;
 }
 
+/*
+//PhysBody functions
+*/
 void PhysBody::GetPosition(int& x, int &y) const
 {
 	b2Vec2 pos = body->GetPosition();
@@ -446,6 +449,13 @@ bool PhysBody::Contains(int x, int y) const
 
 	return false;
 }
+
+void PhysBody::SetPosition(int x, int y)
+{
+	body->SetTransform(b2Vec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)), 0.0f);
+}
+
+
 
 int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const
 {
@@ -480,6 +490,8 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 
 	return ret;
 }
+
+//-------------
 
 void ModulePhysics::BeginContact(b2Contact* contact)
 {
