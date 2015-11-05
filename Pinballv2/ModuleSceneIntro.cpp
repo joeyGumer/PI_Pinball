@@ -25,6 +25,7 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+	scene = App->textures->Load("game/pinball/pinball.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	CreateBorders();
@@ -46,6 +47,8 @@ update_status ModuleSceneIntro::Update()
 	char title[50];
 	sprintf_s(title, "Lives: %d", App->player->lives);
 	App->window->SetTitle(title);
+
+	App->renderer->Blit(scene, 0, 0, NULL);
 	/*if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 22, dynamic_body));
