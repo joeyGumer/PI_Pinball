@@ -60,7 +60,7 @@ update_status ModulePhysics::PreUpdate()
 /*
 //Bodies
 */
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, Body_type type)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, Body_type type, float restitution, bool sensor)
 {
 	b2BodyDef body;
 	switch (type)
@@ -84,6 +84,8 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, Body_type type)
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
+	fixture.restitution = restitution;
+	fixture.isSensor = sensor;
 
 	b->CreateFixture(&fixture);
 
@@ -493,7 +495,7 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 
 //-------------
 
-void ModulePhysics::BeginContact(b2Contact* contact)
+void ModulePhysics::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 {
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();

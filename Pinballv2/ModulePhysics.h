@@ -50,7 +50,7 @@ public:
 	bool CleanUp();
 
 	//Bodies
-	PhysBody* CreateCircle(int x, int y, int radius, Body_type type);
+	PhysBody* CreateCircle(int x, int y, int radius, Body_type type, float restitution = 0.0f,  bool sensor = false);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, Body_type type);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreatePoly(int x, int y, int* points, int size, Body_type type, float restitution);
@@ -60,7 +60,7 @@ public:
 	void CreatePrismaticJoint(int x1, int y1, int x2, int y2, PhysBody* pbodyA, PhysBody* pbodyB, float upper, float lower, float speed);
 	
 	// b2ContactListener ---
-	void BeginContact(b2Contact* contact);
+	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 
 private:
 

@@ -19,13 +19,22 @@ public:
 
 	//Pinball
 	void CreateBorders();
+	void CreateBumpers();
+	void CreateSprings();
 public:
 	p2List<PhysBody*> borders;
 
+	PhysBody*		ball;
+	PhysBody*		leftSpring;
+	PhysBody*		leftSpringCircle;
+	PhysBody*		rightSpring;
+	PhysBody*		rightSpringCircle;
+	PhysBody*		teleport;
 	/*PhysBody* sensor;
 	bool sensed;*/
 	SDL_Texture*		scene;
-
+	
+	float springSpeed;
 
 	uint bonus_fx;
 	p2Point<int> ray;

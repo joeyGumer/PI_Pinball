@@ -23,7 +23,7 @@ public:
 
 public:
 
-	PhysBody*		ball;
+	
 	PhysBody*		rightFlipper;
 	PhysBody*       rightCircle;
 	PhysBody*		leftFlipper;

@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModulePlayer.h"
+#include "ModuleSceneIntro.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
 #include "ModuleInput.h"
@@ -8,7 +9,7 @@
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	ball = rightFlipper = rightCircle =  leftFlipper = leftCircle = NULL;
+	rightFlipper = rightCircle =  leftFlipper = leftCircle = NULL;
 	ballTexture = NULL;
 
 	flipperSpeed = 20;
@@ -46,12 +47,6 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update()
 {
 
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN /*&& !circle*/)
-	{
-		ball = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 10, dynamic_body);
-		//circles.getLast()->data->listener = this;
-	}
-
 	//Flippers Control
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
@@ -82,15 +77,6 @@ update_status ModulePlayer::Update()
 
 
 	//This will be changed to a Oncollision Method
-	if (ball && ball->body->GetPosition().y >= PIXEL_TO_METERS(SCREEN_HEIGHT + 5))
-	{
-		
-		ball->SetPosition(380, 490);
-		b2Vec2 v(0, 0);
-		ball->body->SetLinearVelocity(v);
-		lives--;
-		
-	}
 
 	return UPDATE_CONTINUE;
 }
@@ -106,9 +92,8 @@ void ModulePlayer::CreateFlippers()
 		68, 15,
 		65, 10
 	};
-	leftFlipper = App->physics->CreatePoly(104, 552, Left, 12, dynamic_body, 0);	
-	leftCircle = App->physics->CreateCircle(104 + 15, 552 + 14, 2, static_body);
-	App->physics->CreateRevJoint(15, 14, 0, 0, leftFlipper, leftCircle, 33, -27, -flipperSpeed);
+	leftFlipper = App->physics->CreatePoly(104, 630, Left, 12, dynamic_body, 0);	
+	App->physics->CreateRevJoint(15, 14, 137, 673, leftFlipper, App->scene_intro->borders.getFirst()->data , 33, -27, -flipperSpeed);
 
 	//RightFlipper
 	int Right[12] = {
@@ -119,23 +104,22 @@ void ModulePlayer::CreateFlippers()
 		8, 19,
 		62, 23
 	};
-	rightFlipper = App->physics->CreatePoly(210, 552, Right, 12, dynamic_body, 0);
-	rightCircle = App->physics->CreateCircle(210 + 54, 552 + 14, 2, static_body);
-	App->physics->CreateRevJoint(54, 14, 0, 0, rightFlipper, rightCircle, 33, -27, flipperSpeed);
+	rightFlipper = App->physics->CreatePoly(210, 630, Right, 12, dynamic_body, 0);
+	App->physics->CreateRevJoint(54, 14, 266, 673, rightFlipper, App->scene_intro->borders.getLast()->data , 33, -27, flipperSpeed);
 }
 
 void ModulePlayer::CreateSpring()
 {
 	int Spring[8] = {
 		0, 0,
-		20, 0,
-		20, 10,
+		28, 0,
+		28, 10,
 		0, 10
 	};
 
-	spring = App->physics->CreatePoly(370, 550, Spring, 8, dynamic_body, 0);
-	springCircle = App->physics->CreateCircle(380, 560, 2, static_body);
-	App->physics->CreatePrismaticJoint(10, 5, 0, 0, spring, springCircle, 50, 0, springSpeed);
+	spring = App->physics->CreatePoly(400, 600, Spring, 8, dynamic_body, 0);
+	springCircle = App->physics->CreateCircle(422, 660, 2, static_body);
+	App->physics->CreatePrismaticJoint(14, 5, 0, 0, spring, springCircle, 75, 0, springSpeed);
 }
 
 
