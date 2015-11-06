@@ -28,9 +28,9 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	scene = App->textures->Load("pinball/pinball.png");
-	ballTexture = App->textures->Load("pinball/ball.png");
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	scene = App->textures->Load("Game/pinball/pinball.png");
+	ballTexture = App->textures->Load("Game/pinball/ball.png");
+	//bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	CreateBorders();
 	CreateBumpers();
@@ -536,8 +536,8 @@ void ModuleSceneIntro::CreateBumpers()
 	size = 14;
 	App->physics->CreatePoly(0, 0, bumperTri2, size, static_body, 1.0f);
 
-	App->physics->CreateCircle(73, 93, 19, static_body, 1.0f);
-	App->physics->CreateCircle(262, 163, 19, static_body, 1.0f);
+	App->physics->CreateCircle(73, 93, 19, static_body, 2.5f);
+	App->physics->CreateCircle(262, 163, 19, static_body, 2.5f);
 
 }
 

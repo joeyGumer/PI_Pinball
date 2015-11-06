@@ -26,9 +26,9 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	//ballTexture = App->textures->Load("pinball/wheel.png");
-	springTexture = App->textures->Load("pinball/spring.png");
-	lFlipperTexture = App->textures->Load("pinball/flipperleft.png");
-	rFlipperTexture = App->textures->Load("pinball/flipperright.png");
+	springTexture = App->textures->Load("Game/pinball/spring.png");
+	lFlipperTexture = App->textures->Load("Game/pinball/flipperleft.png");
+	rFlipperTexture = App->textures->Load("Game/pinball/flipperright.png");
 
 	CreateFlippers();
 	CreateSpring();
