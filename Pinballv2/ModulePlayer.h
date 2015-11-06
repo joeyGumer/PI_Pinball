@@ -41,6 +41,13 @@ public:
 	int				lives;
 	int				score;
 	int				bestScore;
+
+	uint			flipperUp_fx;
+	bool            flipperSoundRight;
+	bool            flipperSoundLeft;
+
+	uint			spring_fx;
+	uint			restart_fx;
 	
 
 };

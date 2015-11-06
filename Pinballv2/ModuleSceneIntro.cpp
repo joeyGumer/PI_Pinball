@@ -30,7 +30,8 @@ bool ModuleSceneIntro::Start()
 
 	scene = App->textures->Load("pinball/pinball.png");
 	ballTexture = App->textures->Load("pinball/ball.png");
-	//bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	bumper_fx = App->audio->LoadFx("pinball/bumper.wav");
+	release_fx = App->audio->LoadFx("pinball/release.wav");
 
 	CreateBorders();
 	CreateBumpers();
@@ -71,6 +72,8 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(ballTexture, METERS_TO_PIXELS(ball->body->GetPosition().x)-9, METERS_TO_PIXELS(ball->body->GetPosition().y)-9, NULL);
 		if (ball->body->GetPosition().y >= PIXEL_TO_METERS(SCREEN_HEIGHT + 5))
 		{
+			if (App->player->lives > 0)
+				App->audio->PlayFx(release_fx);
 			ball->SetPosition(422, 579);
 			ball->body->SetLinearVelocity(b2Vec2(0, 0));
 			App->player->lives--;
@@ -139,32 +142,39 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (bumperTri1 == bodyA && ball == bodyB)
 	{
 		App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
 	}
 
 	if (bumperTri2 == bodyA && ball == bodyB)
 	{
 		App->player->score += 100;
+		App->audio->PlayFx(bumper_fx);
 	}
 
 	if (bumperBall1 == bodyA && ball == bodyB)
 	{
 		App->player->score += 1000;
+		App->audio->PlayFx(bumper_fx);
 	}
 	if (bumperBall2 == bodyA && ball == bodyB)
 	{
 		App->player->score += 1000;
+		App->audio->PlayFx(bumper_fx);
 	}
 	if (bumperBall3 == bodyA && ball == bodyB)
 	{
 		App->player->score += 1000;
+		App->audio->PlayFx(bumper_fx);
 	}
 	if (bumperBall4 == bodyA && ball == bodyB)
 	{
 		App->player->score += 1000;
+		App->audio->PlayFx(bumper_fx);
 	}
 	if (bumperBall5 == bodyA && ball == bodyB)
 	{
 		App->player->score += 1000;
+		App->audio->PlayFx(bumper_fx);
 	}
 }
 

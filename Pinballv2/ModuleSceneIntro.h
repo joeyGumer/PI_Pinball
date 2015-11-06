@@ -39,17 +39,15 @@ public:
 	PhysBody*		bumperBall3;
 	PhysBody*		bumperBall4;
 	PhysBody*		bumperBall5;
-	/*PhysBody* sensor;
-	bool sensed;*/
-	SDL_Texture*		scene;
-	SDL_Texture*		ballTexture;
-	
-	float springSpeed;
 
-	bool teleportReady;
-	bool springReady;
-
-	uint bonus_fx;
-	p2Point<int> ray;
+	SDL_Texture*	scene;
+	SDL_Texture*	ballTexture;
 	
+	float			springSpeed;
+
+	bool			teleportReady;
+	bool			springReady;
+
+	uint			bumper_fx;
+	uint			release_fx;
 };
