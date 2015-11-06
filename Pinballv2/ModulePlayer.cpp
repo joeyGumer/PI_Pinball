@@ -11,7 +11,6 @@
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	rightFlipper = rightCircle =  leftFlipper = leftCircle = NULL;
-	//ballTexture = NULL;
 	flipperSoundLeft = flipperSoundRight = false;
 
 	flipperSpeed = 20;
@@ -29,12 +28,12 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
-	springTexture = App->textures->Load("Game/pinball/Textures/spring.png");
-	lFlipperTexture = App->textures->Load("Game/pinball/Textures/flipperleft.png");
-	rFlipperTexture = App->textures->Load("Game/pinball/Textures/flipperright.png");
-	flipperUp_fx = App->audio->LoadFx("Game/pinball/Audios/FlipperUp.wav");
-	spring_fx = App->audio->LoadFx("Game/pinball/Audios/Spring.wav");
-	restart_fx = App->audio->LoadFx("Game/pinball/Audios/restart.wav");
+	springTexture = App->textures->Load("pinball/Textures/spring.png");
+	lFlipperTexture = App->textures->Load("pinball/Textures/flipperleft.png");
+	rFlipperTexture = App->textures->Load("pinball/Textures/flipperright.png");
+	flipperUp_fx = App->audio->LoadFx("pinball/Audios/FlipperUp.wav");
+	spring_fx = App->audio->LoadFx("pinball/Audios/Spring.wav");
+	restart_fx = App->audio->LoadFx("pinball/Audios/restart.wav");
 
 	CreateFlippers();
 	CreateSpring();
@@ -47,7 +46,6 @@ bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
 
-	//App->textures->Unload(ballTexture);
 	App->textures->Unload(springTexture);
 	App->textures->Unload(lFlipperTexture);
 	App->textures->Unload(rFlipperTexture);
@@ -113,8 +111,6 @@ update_status ModulePlayer::Update()
 		App->audio->PlayFx(restart_fx);
 	}
 
-	//This will be changed to a Oncollision Method
-
 	return UPDATE_CONTINUE;
 }
 
@@ -147,32 +143,6 @@ void ModulePlayer::CreateFlippers()
 	rightFlipper = App->physics->CreatePoly(206, 665, Right, 14, dynamic_body, 0);
 	rightCircle = App->physics->CreateCircle(206+60, 665+11, 2, static_body);
 	App->physics->CreateRevJoint(60, 11, 0, 0, rightFlipper, rightCircle, 30, -33, flipperSpeed);
-
-	/*
-	//LeftFlipper
-	int Left[12] = {
-		9, 4,
-		3, 14,
-		9, 23,
-		63, 20,
-		68, 15,
-		65, 10
-	};
-	leftFlipper = App->physics->CreatePoly(104, 630, Left, 12, dynamic_body, 0);	
-	App->physics->CreateRevJoint(15, 14, 137, 673, leftFlipper, App->scene_intro->borders.getFirst()->data , 33, -27, -flipperSpeed);
-
-	//RightFlipper
-	int Right[12] = {
-		70, 13,
-		63, 4,
-		9, 9,
-		4, 15,
-		8, 19,
-		62, 23
-	};
-	rightFlipper = App->physics->CreatePoly(210, 630, Right, 12, dynamic_body, 0);
-	App->physics->CreateRevJoint(54, 14, 266, 673, rightFlipper, App->scene_intro->borders.getLast()->data , 33, -27, flipperSpeed);
-	*/
 }
 
 void ModulePlayer::CreateSpring()

@@ -29,11 +29,11 @@ bool ModuleSceneIntro::Start()
 	
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	scene = App->textures->Load("Game/pinball/Textures/pinball.png");
-	ballTexture = App->textures->Load("Game/pinball/Textures/ball.png");
-	bumper_fx = App->audio->LoadFx("Game/pinball/Audios/bumper.wav");
-	release_fx = App->audio->LoadFx("Game/pinball/Audios/release.wav");
-	App->audio->PlayMusic("Game/pinball/Audios/horse_race.ogg");
+	scene = App->textures->Load("pinball/Textures/pinball.png");
+	ballTexture = App->textures->Load("pinball/Textures/ball.png");
+	bumper_fx = App->audio->LoadFx("pinball/Audios/bumper.wav");
+	release_fx = App->audio->LoadFx("pinball/Audios/release.wav");
+	App->audio->PlayMusic("pinball/Audios/horse_race.ogg");
 
 	CreateBorders();
 	CreateBumpers();
@@ -97,26 +97,6 @@ update_status ModuleSceneIntro::Update()
 		((b2PrismaticJoint*)rightSpring->body->GetJointList()->joint)->SetMotorSpeed(-springSpeed);
 		((b2PrismaticJoint*)leftSpring->body->GetJointList()->joint)->SetMotorSpeed(-springSpeed);
 	}
-	/*ball = NULL;
-	if (ball != NULL && ball->body->GetPosition().y == PIXEL_TO_METERS(302)/* && ball->body->GetPosition().x == PIXEL_TO_METERS(142));
-	{
-		
-		ball->SetPosition(68, 400);
-		ball->body->SetLinearVelocity(b2Vec2(0, 0));
-		App->player->lives--;
-
-	}*/
-	// All draw functions ------------------------------------------------------
-	/*p2List_item<PhysBody*>* c = circles.getFirst();
-
-	while(c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
-			App->renderer->Blit(ball, x, y, NULL, 1.0f, c->data->GetRotation());
-		c = c->next;
-	}*/
 
 	return UPDATE_CONTINUE;
 }
@@ -127,7 +107,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	if (teleport == bodyA && ball == bodyB)
 	{
 		teleportReady = true;
-		//ball->SetPosition(68, 400);
+		App->player->score += 5000;
 	}
 	if (rightSpring == bodyA && ball == bodyB)
 	{
@@ -512,7 +492,6 @@ void ModuleSceneIntro::CreateBorders()
 	};
 	size = 18;
 	App->physics->CreateChain(0, 0, border7, size);
-	//Atached to the flippers
 	//8
 	int border8[22] = {
 		81, 536,
