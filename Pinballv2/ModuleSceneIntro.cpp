@@ -13,13 +13,6 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 {
 	scene = NULL;
 	ball = leftSpring = leftSpringCircle = rightSpring = rightSpringCircle = teleport = NULL;
-	
-	bumperBall2 = NULL;
-	bumperBall3 = NULL;
-	bumperBall4 = NULL;
-	bumperBall5 = NULL;
-	bumperTri1 = NULL;
-	bumperTri2 = NULL;
 
 	springSpeed = 100.0f;
 	springReady = teleportReady = false;
@@ -530,7 +523,7 @@ void ModuleSceneIntro::CreateBumpers()
 		110, 548
 	};
 	size = 14;
-	bumperTri1 = App->physics->CreatePoly(0, 0, bumperTriangle1, size, static_body, 1.0f);
+	App->physics->CreatePoly(0, 0, bumperTriangle1, size, static_body, 1.0f);
 
 	int bumperTriangle2[14] = {
 		293, 547,
@@ -542,10 +535,10 @@ void ModuleSceneIntro::CreateBumpers()
 		297, 554
 	};
 	size = 14;
-	bumperTri2 = App->physics->CreatePoly(0, 0, bumperTriangle2, size, static_body, 1.0f);
+	App->physics->CreatePoly(0, 0, bumperTriangle2, size, static_body, 1.0f);
 
-	bumperBall1 = App->physics->CreateCircle(73, 93, 19, static_body, 2.5f);
-	bumperBall2 = App->physics->CreateCircle(262, 163, 19, static_body, 2.5f);
+	App->physics->CreateCircle(73, 93, 19, static_body, 2.5f);
+	App->physics->CreateCircle(262, 163, 19, static_body, 2.5f);
 
 }
 
