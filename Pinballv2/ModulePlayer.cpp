@@ -53,9 +53,9 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update()
 {
 	App->renderer->Blit(springTexture, METERS_TO_PIXELS(spring->body->GetPosition().x)+3, METERS_TO_PIXELS(spring->body->GetPosition().y), NULL);
-	//App->renderer->Blit(lFlipperTexture, METERS_TO_PIXELS(leftFlipper->body->GetPosition().x), METERS_TO_PIXELS(leftFlipper->body->GetPosition().y), NULL, 1.0f, leftFlipper->body->GetAngle(),0,0);
-	//App->renderer->Blit(rFlipperTexture, METERS_TO_PIXELS(rightFlipper->body->GetPosition().x), METERS_TO_PIXELS(rightFlipper->body->GetPosition().y), NULL, 1.0f, rightFlipper->body->GetAngle(), 0, 0);
-
+	App->renderer->Blit(lFlipperTexture, METERS_TO_PIXELS(leftFlipper->body->GetPosition().x), METERS_TO_PIXELS(leftFlipper->body->GetPosition().y), NULL, 1.0f, RADTODEG*leftFlipper->body->GetAngle(),0,0);
+	App->renderer->Blit(rFlipperTexture, METERS_TO_PIXELS(rightFlipper->body->GetPosition().x), METERS_TO_PIXELS(rightFlipper->body->GetPosition().y), NULL, 1.0f, RADTODEG*rightFlipper->body->GetAngle(), 0, 0);
+	LOG("%f.3", leftFlipper->body->GetAngle());
 	//Flippers Control
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
