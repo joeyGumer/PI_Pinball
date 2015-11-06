@@ -38,6 +38,7 @@ public:
 	float springSpeed;
 
 	bool teleportReady;
+	bool springReady;
 
 	uint bonus_fx;
 	p2Point<int> ray;

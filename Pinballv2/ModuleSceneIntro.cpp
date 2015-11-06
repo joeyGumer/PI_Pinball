@@ -14,7 +14,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	scene = NULL;
 	ball = leftSpring = leftSpringCircle = rightSpring = rightSpringCircle = teleport = NULL;
 	springSpeed = 100.0f;
-	teleportReady = false;
+	springReady = teleportReady = false;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -88,6 +88,13 @@ update_status ModuleSceneIntro::Update()
 			ball->body->ApplyForce(b2Vec2(0,2),b2Vec2(0,2),false);
 		}
 	}
+
+	if (springReady)
+	{
+		springReady = false;
+		((b2PrismaticJoint*)rightSpring->body->GetJointList()->joint)->SetMotorSpeed(-springSpeed);
+		((b2PrismaticJoint*)leftSpring->body->GetJointList()->joint)->SetMotorSpeed(-springSpeed);
+	}
 	/*ball = NULL;
 	if (ball != NULL && ball->body->GetPosition().y == PIXEL_TO_METERS(302)/* && ball->body->GetPosition().x == PIXEL_TO_METERS(142));
 	{
@@ -122,11 +129,13 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 	if (rightSpring == bodyA && ball == bodyB)
 	{
+		springReady = true;
 		((b2PrismaticJoint*)rightSpring->body->GetJointList()->joint)->SetMotorSpeed(springSpeed);
 	}
 
 	if (leftSpring == bodyA && ball == bodyB)
 	{
+		springReady = true;
 		((b2PrismaticJoint*)leftSpring->body->GetJointList()->joint)->SetMotorSpeed(springSpeed);
 	}
 }
