@@ -26,12 +26,14 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	scene = App->textures->Load("pinball/pinball.png");
-	ballTexture = App->textures->Load("pinball/ball.png");
-	bumper_fx = App->audio->LoadFx("pinball/bumper.wav");
-	release_fx = App->audio->LoadFx("pinball/release.wav");
+	scene = App->textures->Load("Game/pinball/Textures/pinball.png");
+	ballTexture = App->textures->Load("Game/pinball/Textures/ball.png");
+	bumper_fx = App->audio->LoadFx("Game/pinball/Audios/bumper.wav");
+	release_fx = App->audio->LoadFx("Game/pinball/Audios/release.wav");
+	App->audio->PlayMusic("Game/pinball/Audios/horse_race.ogg");
 
 	CreateBorders();
 	CreateBumpers();
@@ -131,12 +133,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		springReady = true;
 		((b2PrismaticJoint*)rightSpring->body->GetJointList()->joint)->SetMotorSpeed(springSpeed);
+		App->audio->PlayFx(App->player->spring_fx);
 	}
 
 	if (leftSpring == bodyA && ball == bodyB)
 	{
 		springReady = true;
 		((b2PrismaticJoint*)leftSpring->body->GetJointList()->joint)->SetMotorSpeed(springSpeed);
+		App->audio->PlayFx(App->player->spring_fx);
 	}
 
 	if (bumperTri1 == bodyA && ball == bodyB)

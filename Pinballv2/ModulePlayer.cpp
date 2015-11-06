@@ -29,13 +29,12 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
-	//ballTexture = App->textures->Load("pinball/wheel.png");
-	springTexture = App->textures->Load("pinball/spring.png");
-	lFlipperTexture = App->textures->Load("pinball/flipperleft.png");
-	rFlipperTexture = App->textures->Load("pinball/flipperright.png");
-	flipperUp_fx = App->audio->LoadFx("pinball/FlipperUp.wav");
-	spring_fx = App->audio->LoadFx("pinball/Spring.wav");
-	restart_fx = App->audio->LoadFx("pinball/restart.wav");
+	springTexture = App->textures->Load("Game/pinball/Textures/spring.png");
+	lFlipperTexture = App->textures->Load("Game/pinball/Textures/flipperleft.png");
+	rFlipperTexture = App->textures->Load("Game/pinball/Textures/flipperright.png");
+	flipperUp_fx = App->audio->LoadFx("Game/pinball/Audios/FlipperUp.wav");
+	spring_fx = App->audio->LoadFx("Game/pinball/Audios/Spring.wav");
+	restart_fx = App->audio->LoadFx("Game/pinball/Audios/restart.wav");
 
 	CreateFlippers();
 	CreateSpring();
