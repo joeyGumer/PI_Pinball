@@ -28,8 +28,8 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	scene = App->textures->Load("Game/pinball/pinball.png");
-	ballTexture = App->textures->Load("Game/pinball/ball.png");
+	scene = App->textures->Load("pinball/pinball.png");
+	ballTexture = App->textures->Load("pinball/ball.png");
 	//bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	CreateBorders();
@@ -38,6 +38,10 @@ bool ModuleSceneIntro::Start()
 
 	teleport = App->physics->CreateCircle(142, 303, 2, static_body);
 	teleport->listener = this;
+
+	ball = App->physics->CreateCircle(422, 579, 9, dynamic_body);
+	ball->listener = this;
+	ball->body->SetLinearVelocity(b2Vec2(0, 0));
 
 	return ret;
 }
@@ -57,17 +61,10 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	char title[50];
-	sprintf_s(title, "Lives: %d", App->player->lives);
+	sprintf_s(title, "Lives: %d   Score: %d   Best Score: %d", App->player->lives, App->player->score, App->player->bestScore);
 	App->window->SetTitle(title);
 
 	App->renderer->Blit(scene, 0, 0, NULL);
-
-
-	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && !ball)
-	{
-		ball = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9, dynamic_body);	
-		ball->listener = this;
-	}
 
 	if (ball)
 	{ 
@@ -137,6 +134,37 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		springReady = true;
 		((b2PrismaticJoint*)leftSpring->body->GetJointList()->joint)->SetMotorSpeed(springSpeed);
+	}
+
+	if (bumperTri1 == bodyA && ball == bodyB)
+	{
+		App->player->score += 100;
+	}
+
+	if (bumperTri2 == bodyA && ball == bodyB)
+	{
+		App->player->score += 100;
+	}
+
+	if (bumperBall1 == bodyA && ball == bodyB)
+	{
+		App->player->score += 1000;
+	}
+	if (bumperBall2 == bodyA && ball == bodyB)
+	{
+		App->player->score += 1000;
+	}
+	if (bumperBall3 == bodyA && ball == bodyB)
+	{
+		App->player->score += 1000;
+	}
+	if (bumperBall4 == bodyA && ball == bodyB)
+	{
+		App->player->score += 1000;
+	}
+	if (bumperBall5 == bodyA && ball == bodyB)
+	{
+		App->player->score += 1000;
 	}
 }
 
@@ -512,7 +540,7 @@ void ModuleSceneIntro::CreateBumpers()
 {
 	int size = 0;
 
-	int bumperTri1[14] = {
+	int bumperTriangle1[14] = {
 		105, 551,
 		105, 599,
 		135, 620,
@@ -522,9 +550,10 @@ void ModuleSceneIntro::CreateBumpers()
 		110, 548
 	};
 	size = 14;
-	App->physics->CreatePoly(0, 0, bumperTri1, size, static_body, 1.0f);
+	bumperTri1 = App->physics->CreatePoly(0, 0, bumperTriangle1, size, static_body, 1.0f);
+	bumperTri1->listener = this;
 
-	int bumperTri2[14] = {
+	int bumperTriangle2[14] = {
 		293, 547,
 		286, 556,
 		261, 615,
@@ -534,10 +563,23 @@ void ModuleSceneIntro::CreateBumpers()
 		297, 554
 	};
 	size = 14;
-	App->physics->CreatePoly(0, 0, bumperTri2, size, static_body, 1.0f);
+	bumperTri2 = App->physics->CreatePoly(0, 0, bumperTriangle2, size, static_body, 1.0f);
+	bumperTri2->listener = this;
 
-	App->physics->CreateCircle(73, 93, 19, static_body, 2.5f);
-	App->physics->CreateCircle(262, 163, 19, static_body, 2.5f);
+	bumperBall1 = App->physics->CreateCircle(73, 93, 19, static_body, 2.5f);
+	bumperBall1->listener = this;
+
+	bumperBall2 = App->physics->CreateCircle(262, 163, 19, static_body, 2.5f);
+	bumperBall2->listener = this;
+
+	bumperBall3 = App->physics->CreateCircle(167, 163, 11, static_body, 1.5f);
+	bumperBall3->listener = this;
+
+	bumperBall4 = App->physics->CreateCircle(136, 199, 11, static_body, 1.5f);
+	bumperBall4->listener = this;
+
+	bumperBall5 = App->physics->CreateCircle(173, 218, 11, static_body, 1.5f);
+	bumperBall5->listener = this;
 
 }
 

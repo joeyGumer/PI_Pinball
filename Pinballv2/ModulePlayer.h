@@ -39,6 +39,8 @@ public:
 	float			flipperSpeed;
 	float           springSpeed;
 	int				lives;
+	int				score;
+	int				bestScore;
 	
 
 };

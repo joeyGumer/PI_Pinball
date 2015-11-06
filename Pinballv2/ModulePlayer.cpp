@@ -15,6 +15,8 @@ ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, s
 	flipperSpeed = 20;
 	springSpeed = 20;
 	lives = 5;
+	score = 0;
+	bestScore = 0;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -26,9 +28,9 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	//ballTexture = App->textures->Load("pinball/wheel.png");
-	springTexture = App->textures->Load("Game/pinball/spring.png");
-	lFlipperTexture = App->textures->Load("Game/pinball/flipperleft.png");
-	rFlipperTexture = App->textures->Load("Game/pinball/flipperright.png");
+	springTexture = App->textures->Load("pinball/spring.png");
+	lFlipperTexture = App->textures->Load("pinball/flipperleft.png");
+	rFlipperTexture = App->textures->Load("pinball/flipperright.png");
 
 	CreateFlippers();
 	CreateSpring();
@@ -84,6 +86,14 @@ update_status ModulePlayer::Update()
 		((b2PrismaticJoint*)spring->body->GetJointList()->joint)->SetMotorSpeed(springSpeed);
 	}
 
+	if (lives == 0)
+	{
+		lives = 5;
+		if (score > bestScore)
+			bestScore = score;
+
+		score = 0;
+	}
 
 	//This will be changed to a Oncollision Method
 

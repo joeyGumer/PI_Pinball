@@ -30,6 +30,15 @@ public:
 	PhysBody*		rightSpring;
 	PhysBody*		rightSpringCircle;
 	PhysBody*		teleport;
+
+	PhysBody*		bumperTri1;
+	PhysBody*		bumperTri2;
+
+	PhysBody*		bumperBall1;
+	PhysBody*		bumperBall2;
+	PhysBody*		bumperBall3;
+	PhysBody*		bumperBall4;
+	PhysBody*		bumperBall5;
 	/*PhysBody* sensor;
 	bool sensed;*/
 	SDL_Texture*		scene;
