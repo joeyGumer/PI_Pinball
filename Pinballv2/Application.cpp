@@ -17,7 +17,7 @@ Application::Application()
 	window = new ModuleWindow(this);
 	textures = new ModuleTextures(this);
 	input = new ModuleInput(this);
-	//audio = new ModuleAudio(this, true);
+	audio = new ModuleAudio(this, true);
 	player = new ModulePlayer(this);
 	scene_intro = new ModuleSceneIntro(this);
 	physics = new ModulePhysics(this);
@@ -32,7 +32,7 @@ Application::Application()
 	AddModule(renderer);
 	AddModule(textures);
 	AddModule(input);
-	//AddModule(audio);
+	AddModule(audio);
 	
 	// Scenes
 	AddModule(scene_intro);

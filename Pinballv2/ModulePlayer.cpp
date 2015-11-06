@@ -6,11 +6,14 @@
 #include "ModuleTextures.h"
 #include "ModuleInput.h"
 #include "ModulePhysics.h"
+#include "ModuleAudio.h"
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	rightFlipper = rightCircle =  leftFlipper = leftCircle = NULL;
 	//ballTexture = NULL;
+
+	flipperSoundLeft = flipperSoundRight = false;
 
 	flipperSpeed = 20;
 	springSpeed = 20;
@@ -29,6 +32,8 @@ bool ModulePlayer::Start()
 	springTexture = App->textures->Load("Game/pinball/spring.png");
 	lFlipperTexture = App->textures->Load("Game/pinball/flipperleft.png");
 	rFlipperTexture = App->textures->Load("Game/pinball/flipperright.png");
+
+	flipperUp_fx = App->audio->LoadFx("Game/pinball/FlipperUp.wav");
 
 	CreateFlippers();
 	CreateSpring();
@@ -60,19 +65,31 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		((b2RevoluteJoint*)leftFlipper->body->GetJointList()->joint)->SetMotorSpeed(flipperSpeed);
+		if (flipperSoundLeft)
+		{
+			App->audio->PlayFx(flipperUp_fx);
+			flipperSoundLeft = false;
+		}
 	}
 	else if(App->input->GetKey(SDL_SCANCODE_A) == KEY_UP)
 	{
 		((b2RevoluteJoint*)leftFlipper->body->GetJointList()->joint)->SetMotorSpeed(-flipperSpeed);
+		flipperSoundLeft = true;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
 		((b2RevoluteJoint*)rightFlipper->body->GetJointList()->joint)->SetMotorSpeed(-flipperSpeed);
+		if (flipperSoundRight)
+		{
+			App->audio->PlayFx(flipperUp_fx);
+			flipperSoundRight = false;
+		}
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_UP)
 	{
 		((b2RevoluteJoint*)rightFlipper->body->GetJointList()->joint)->SetMotorSpeed(flipperSpeed);
+		flipperSoundRight = true;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)

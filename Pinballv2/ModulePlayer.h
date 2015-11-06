@@ -39,6 +39,10 @@ public:
 	float			flipperSpeed;
 	float           springSpeed;
 	int				lives;
+
+	uint			flipperUp_fx;
+	bool            flipperSoundRight;
+	bool            flipperSoundLeft;
 	
 
 };

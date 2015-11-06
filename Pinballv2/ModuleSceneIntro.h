@@ -30,6 +30,15 @@ public:
 	PhysBody*		rightSpring;
 	PhysBody*		rightSpringCircle;
 	PhysBody*		teleport;
+
+	PhysBody*       bumperBall1;
+	PhysBody*       bumperBall2;
+	PhysBody*       bumperBall3;
+	PhysBody*       bumperBall4;
+	PhysBody*       bumperBall5;
+
+	PhysBody*       bumperTri1;
+	PhysBody*       bumperTri2;
 	/*PhysBody* sensor;
 	bool sensed;*/
 	SDL_Texture*		scene;
@@ -41,6 +50,9 @@ public:
 	bool springReady;
 
 	uint bonus_fx;
+	uint flipperUp_fx;
+	uint bumper_fx;
+
 	p2Point<int> ray;
 	
 };
