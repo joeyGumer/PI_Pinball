@@ -31,10 +31,14 @@ public:
 	PhysBody*		spring;
 	PhysBody*		springCircle;
 
-	SDL_Texture*	ballTexture;
+	//SDL_Texture*	ballTexture;
+	SDL_Texture*	springTexture;
+	SDL_Texture*	lFlipperTexture;
+	SDL_Texture*	rFlipperTexture;
 
 	float			flipperSpeed;
 	float           springSpeed;
 	int				lives;
+	
 
 };

@@ -33,8 +33,11 @@ public:
 	/*PhysBody* sensor;
 	bool sensed;*/
 	SDL_Texture*		scene;
+	SDL_Texture*		ballTexture;
 	
 	float springSpeed;
+
+	bool teleportReady;
 
 	uint bonus_fx;
 	p2Point<int> ray;

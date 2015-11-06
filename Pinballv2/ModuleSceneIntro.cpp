@@ -14,6 +14,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	scene = NULL;
 	ball = leftSpring = leftSpringCircle = rightSpring = rightSpringCircle = teleport = NULL;
 	springSpeed = 100.0f;
+	teleportReady = false;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -27,14 +28,15 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	scene = App->textures->Load("game/pinball/pinball.png");
+	scene = App->textures->Load("pinball/pinball.png");
+	ballTexture = App->textures->Load("pinball/ball.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	CreateBorders();
 	CreateBumpers();
 	CreateSprings();
 
-	teleport = App->physics->CreateCircle(142, 303, 9, static_body);
+	teleport = App->physics->CreateCircle(142, 303, 2, static_body);
 	teleport->listener = this;
 
 	return ret;
@@ -44,6 +46,9 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	App->textures->Unload(scene);
+	App->textures->Unload(ballTexture);
 
 	return true;
 }
@@ -58,7 +63,6 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(scene, 0, 0, NULL);
 
 
-
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && !ball)
 	{
 		ball = App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9, dynamic_body);	
@@ -67,6 +71,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (ball)
 	{ 
+		App->renderer->Blit(ballTexture, METERS_TO_PIXELS(ball->body->GetPosition().x)-9, METERS_TO_PIXELS(ball->body->GetPosition().y)-9, NULL);
 		if (ball->body->GetPosition().y >= PIXEL_TO_METERS(SCREEN_HEIGHT + 5))
 		{
 			ball->SetPosition(422, 579);
@@ -75,6 +80,12 @@ update_status ModuleSceneIntro::Update()
 
 			((b2PrismaticJoint*)rightSpring->body->GetJointList()->joint)->SetMotorSpeed(-springSpeed);
 			((b2PrismaticJoint*)leftSpring->body->GetJointList()->joint)->SetMotorSpeed(-springSpeed);
+		}
+		if (teleportReady)
+		{
+			teleportReady = false;
+			ball->SetPosition(68, 400);
+			ball->body->ApplyForce(b2Vec2(0,2),b2Vec2(0,2),false);
 		}
 	}
 	/*ball = NULL;
@@ -104,10 +115,11 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	//("COLLISION");
-	/*if (teleport == bodyA)
+	if (teleport == bodyA && ball == bodyB)
 	{
-		ball->SetPosition(68, 400);
-	}*/
+		teleportReady = true;
+		//ball->SetPosition(68, 400);
+	}
 	if (rightSpring == bodyA && ball == bodyB)
 	{
 		((b2PrismaticJoint*)rightSpring->body->GetJointList()->joint)->SetMotorSpeed(springSpeed);
@@ -483,6 +495,8 @@ void ModuleSceneIntro::CreateBorders()
 	size = 22;
 	borders.add(App->physics->CreateChain(0, 0, border9, size));
 
+	App->physics->CreateRectangle(246,103,4,15,static_body);
+
 }
 
 void ModuleSceneIntro::CreateBumpers()
@@ -499,7 +513,7 @@ void ModuleSceneIntro::CreateBumpers()
 		110, 548
 	};
 	size = 14;
-	App->physics->CreatePoly(0, 0, bumperTri1, size, static_body, 2.0f);
+	App->physics->CreatePoly(0, 0, bumperTri1, size, static_body, 1.0f);
 
 	int bumperTri2[14] = {
 		293, 547,
@@ -511,7 +525,10 @@ void ModuleSceneIntro::CreateBumpers()
 		297, 554
 	};
 	size = 14;
-	App->physics->CreatePoly(0, 0, bumperTri2, size, static_body, 2.0f);
+	App->physics->CreatePoly(0, 0, bumperTri2, size, static_body, 1.0f);
+
+	App->physics->CreateCircle(73, 93, 19, static_body, 1.0f);
+	App->physics->CreateCircle(262, 163, 19, static_body, 1.0f);
 
 }
 
